@@ -1,4 +1,4 @@
-#### Demo Description
+## Demo Description
 
 This is a simple Shiny app to demonstrate some Shiny and R capabilities. The app utilizes the `quantmod` package to retrieve data from Yahoo! Finance.
 
