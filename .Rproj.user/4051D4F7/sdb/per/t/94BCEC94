@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "\n\nlibrary(shiny)\nlibrary(quantmod)\nlibrary(ggplot2)\nlibrary(broom)\nlibrary(dplyr)\nlibrary(markdown)\n\nshinyServer(function(input, output) {\n    \n    rv <- reactiveValues(symbols=NULL, data=NULL, plotReady=F, plotToShow=NULL)\n    \n    output$symbolList <- renderUI({\n        d <- stockSymbols(input$selectExchange) %>%\n            mutate(SymbolName = paste0(Name, \" (\", Symbol, \")\"))\n        rv$symbols <- d\n        selectInput(\"selectSymbol\", \"Select a symbol to retrieve\",\n                    choices = rv$symbols$SymbolName,\n                    selectize=F)\n    })\n\n    observeEvent(input$selectSymbol, {\n        SymbolToGet <- rv$symbols$Symbol[rv$symbols$SymbolName == input$selectSymbol]\n        d <- getSymbols(SymbolToGet, auto.assign = F)\n        \n        dataToPlot <- Cl(d)\n        names(dataToPlot) <- \"Close\"\n        index(dataToPlot) <- as.Date(index(dataToPlot))\n        dataToPlot <- tidy(dataToPlot)\n        \n        g <- ggplot(dataToPlot, aes(x=index, y=value)) +\n            geom_line(color=\"steelblue\") +\n            ggtitle(paste0(\"\\n\",input$selectSymbol),\"\\n\") +\n            theme(axis.title = element_blank(),\n                  plot.title = element_text(size=16))\n        rv$plotToShow <- g\n        \n        # rv$plotToShow <- barChart(d)\n        \n    })\n    \n    output$Plot1 <- renderPlot({rv$plotToShow})\n\n})\n",
+    "created" : 1493574997462.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4097833529",
+    "id" : "94BCEC94",
+    "lastKnownWriteTime" : 1493661691,
+    "last_content_update" : -2147483648,
+    "path" : "C:/Users/arigler.BELLRESEARCH/Dropbox/tsDemo/server.R",
+    "project_path" : "server.R",
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
