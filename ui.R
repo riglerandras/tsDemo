@@ -26,7 +26,11 @@ shinyUI(fluidPage(
     mainPanel(
         tabsetPanel(
             tabPanel("Main",
-                plotOutput("Plot1")
+                     h4("Simple line output"),
+                imageOutput("Plot1"),
+                h4("Barchart output"),
+                imageOutput("Plot2")
+                
                 
             ),
             tabPanel("Description",
